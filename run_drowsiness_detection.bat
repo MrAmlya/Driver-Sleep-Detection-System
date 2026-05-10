@@ -76,6 +76,14 @@ if errorlevel 1 (
     exit /b 1
 )
 
+".venv\Scripts\python.exe" -c "import mediapipe as mp; mp.solutions.face_mesh" >nul 2>nul
+if errorlevel 1 (
+    echo Installed MediaPipe does not include the legacy face_mesh API required by this app.
+    echo Delete the .venv folder and run this file again.
+    pause
+    exit /b 1
+)
+
 ".venv\Scripts\python.exe" drowsiness_detection.py
 if errorlevel 1 (
     echo The application stopped with an error.
