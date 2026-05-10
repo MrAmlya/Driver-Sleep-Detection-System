@@ -13,6 +13,22 @@ def resource_path(relative_path):
     return os.path.join(os.path.dirname(os.path.abspath(__file__)), relative_path)
 
 
+def load_face_mesh_module():
+    try:
+        return mp.solutions.face_mesh
+    except AttributeError:
+        try:
+            from mediapipe.python.solutions import face_mesh
+        except ImportError as error:
+            version = getattr(mp, "__version__", "unknown")
+            raise RuntimeError(
+                "MediaPipe Face Mesh is unavailable. "
+                f"Installed mediapipe version: {version}. "
+                "Delete .venv and run run_drowsiness_detection.bat again."
+            ) from error
+        return face_mesh
+
+
 # -----------------------------
 # ALARM SETUP
 # -----------------------------
@@ -28,7 +44,7 @@ except pygame.error as error:
 # -----------------------------
 # MEDIAPIPE SETUP
 # -----------------------------
-mp_face_mesh = mp.solutions.face_mesh
+mp_face_mesh = load_face_mesh_module()
 face_mesh = mp_face_mesh.FaceMesh(
     max_num_faces=1,
     refine_landmarks=True,

@@ -8,23 +8,13 @@ py -3.12 -c "import sys" >nul 2>nul
 if not errorlevel 1 set "PYTHON_EXE=py -3.12"
 
 if not defined PYTHON_EXE (
-    py -3.11 -c "import sys" >nul 2>nul
-    if not errorlevel 1 set "PYTHON_EXE=py -3.11"
-)
-
-if not defined PYTHON_EXE (
-    py -3.10 -c "import sys" >nul 2>nul
-    if not errorlevel 1 set "PYTHON_EXE=py -3.10"
-)
-
-if not defined PYTHON_EXE (
-    python -c "import sys; raise SystemExit(0 if (3, 10) <= sys.version_info[:2] <= (3, 12) else 1)" >nul 2>nul
+    python -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 12) else 1)" >nul 2>nul
     if not errorlevel 1 set "PYTHON_EXE=python"
 )
 
 if not defined PYTHON_EXE (
-    echo Python 3.10, 3.11, or 3.12 was not found.
-    echo Install one of those versions from https://www.python.org/downloads/windows/
+    echo Python 3.12 was not found.
+    echo Install 64-bit Python 3.12 from https://www.python.org/downloads/windows/
     echo Make sure "Add python.exe to PATH" is selected during installation.
     pause
     exit /b 1
@@ -53,10 +43,10 @@ if not exist ".venv\Scripts\python.exe" (
     exit /b 1
 )
 
-".venv\Scripts\python.exe" -c "import sys; raise SystemExit(0 if (3, 10) <= sys.version_info[:2] <= (3, 12) else 1)" >nul 2>nul
+".venv\Scripts\python.exe" -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 12) else 1)" >nul 2>nul
 if errorlevel 1 (
     echo Existing virtual environment uses an unsupported Python version.
-    echo Delete the .venv folder and run this file again with Python 3.10, 3.11, or 3.12 installed.
+    echo Delete the .venv folder and run this file again with 64-bit Python 3.12 installed.
     pause
     exit /b 1
 )
@@ -76,7 +66,7 @@ if errorlevel 1 (
     exit /b 1
 )
 
-".venv\Scripts\python.exe" -c "import mediapipe as mp; mp.solutions.face_mesh" >nul 2>nul
+".venv\Scripts\python.exe" -c "import importlib, mediapipe as mp; getattr(getattr(mp, 'solutions', None), 'face_mesh', None) or importlib.import_module('mediapipe.python.solutions.face_mesh')" >nul 2>nul
 if errorlevel 1 (
     echo Installed MediaPipe does not include the legacy face_mesh API required by this app.
     echo Delete the .venv folder and run this file again.
