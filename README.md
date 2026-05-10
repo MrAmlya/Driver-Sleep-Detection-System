@@ -4,7 +4,7 @@ Real-time drowsiness detection using a webcam. The app detects eye closure and y
 
 ## Requirements
 
-- Python 3.x
+- Python 3.10, 3.11, or 3.12
 - Webcam access
 - `alarm.mp3` in the project folder
 
@@ -30,6 +30,8 @@ Press `q` in the webcam window to quit.
 - Windows: double-click `run_drowsiness_detection.bat`
 
 To create a Windows `.exe`, run `build_windows_exe.bat` on Windows. The output will be created at `dist\DriverDrowsinessDetection.exe`.
+
+If Windows shows an error about `.venv\Scripts\activate`, delete the `.venv` folder and run the `.bat` file again. If dependency installation fails on `mediapipe`, install Python 3.10, 3.11, or 3.12 from python.org and make sure Python is added to PATH.
 
 ## Files
 
